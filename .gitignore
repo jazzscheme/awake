@@ -1,0 +1,10 @@
+/bin
+/binaries
+/build
+/cache
+/gambit
+/zen
+/.zn
+/.znini
+.configuration
+.DS_Store

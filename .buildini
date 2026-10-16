@@ -1,0 +1,10 @@
+;;;=============
+;;;  ZenScheme
+;;;=============
+;;;
+;;;; Local buildini
+;;;
+
+
+(zen:zen-repository "zen")
+(zen:repositories ".")

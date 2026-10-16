@@ -1,0 +1,112 @@
+#!/bin/sh
+
+REL="$(dirname "$0")"
+
+ZEN="$REL/zen"
+ZN="$ZEN/zn"
+
+REPOCOLOR='\033[1;34m'
+NOCOLOR='\033[0m'
+
+case $OSTYPE in
+    "msys" )
+        alias git='"/c/Program Files/Git/bin/git"'
+	     ;;
+esac
+
+feedback() {
+    case $OSTYPE in
+        "msys" )
+            echo -e "$1"
+	         ;;
+
+        * )
+            echo "$1"
+            ;;
+    esac
+}
+
+display_info () {
+    feedback "${REPOCOLOR}$1${NOCOLOR}"
+    if [ -d "$2" ]; then
+	     cd "$2" &&
+	     git log -1
+    fi
+}
+
+display_all_info () {
+    (display_info "Awake" "$REL")
+    echo
+    (display_info "Zen" "$ZEN")
+}
+
+display_status () {
+    feedback "${REPOCOLOR}$1${NOCOLOR}"
+    if [ -d "$2" ]; then
+	     cd "$2" &&
+	     git status
+    fi
+}
+
+display_all_status () {
+    (display_status "Awake" "$REL")
+    echo
+    (display_status "Zen" "$ZEN")
+}
+
+display_diff () {
+    feedback "${REPOCOLOR}$1${NOCOLOR}"
+    if [ -d "$2" ]; then
+	     cd "$2" &&
+	     git diff
+    fi
+}
+
+display_all_diff () {
+    (display_diff "Awake" "$REL")
+    echo
+    (display_diff "Zen" "$ZEN")
+}
+
+pull () {
+    feedback "${REPOCOLOR}$1${NOCOLOR}"
+    if [ -d "$2" ]; then
+	     cd "$2" &&
+	     git pull
+    fi
+}
+
+pull_all () {
+    (pull "Awake" "$REL")
+    echo
+    (pull "Zen" "$ZEN")
+}
+
+case "$1" in
+	"info" )
+		display_all_info
+		exit
+		;;
+
+	"status" )
+		display_all_status
+		exit
+		;;
+
+	"diff" )
+		display_all_diff
+		exit
+		;;
+
+	"pull" )
+		pull_all
+		exit
+		;;
+esac
+
+if [ ! -f "$ZN" ]; then
+	echo "Unable to find zen/zn"
+	exit 1
+fi
+
+exec "$ZN" "$@"
